@@ -1,0 +1,28 @@
+# Dependencies
+node_modules/
+backend/__pycache__/
+*/__pycache__/
+*.pyc
+*.pyo
+
+# Environment & Secrets
+.env
+backend/.env
+*.local
+
+# Build output
+frontend/dist/
+dist/
+
+# Database
+*.db
+backend/*.db
+backend/data/*.db
+*.sqlite3
+
+# Logs & Temporary
+*.log
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
