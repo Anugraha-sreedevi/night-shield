@@ -1,0 +1,845 @@
+{
+  "stops": [
+    {
+      "cctv_active": true,
+      "crowd_level": "Medium",
+      "has_sos_booth": true,
+      "historical_incident_rate": 0.08,
+      "id": "stop_01",
+      "lat": 12.998,
+      "lighting_quality": "High",
+      "lng": 77.585,
+      "name": "North Tech Hub"
+    },
+    {
+      "cctv_active": true,
+      "crowd_level": "High",
+      "has_sos_booth": true,
+      "historical_incident_rate": 0.14,
+      "id": "stop_02",
+      "lat": 12.986,
+      "lighting_quality": "Medium",
+      "lng": 77.592,
+      "name": "Cyberia Crossing"
+    },
+    {
+      "cctv_active": true,
+      "crowd_level": "Medium",
+      "has_sos_booth": false,
+      "historical_incident_rate": 0.06,
+      "id": "stop_03",
+      "lat": 12.978,
+      "lighting_quality": "High",
+      "lng": 77.584,
+      "name": "St. Jude Square"
+    },
+    {
+      "cctv_active": true,
+      "crowd_level": "High",
+      "has_sos_booth": true,
+      "historical_incident_rate": 0.04,
+      "id": "stop_04",
+      "lat": 12.972,
+      "lighting_quality": "High",
+      "lng": 77.601,
+      "name": "Central Interchange"
+    },
+    {
+      "cctv_active": true,
+      "crowd_level": "High",
+      "has_sos_booth": true,
+      "historical_incident_rate": 0.05,
+      "id": "stop_05",
+      "lat": 12.965,
+      "lighting_quality": "High",
+      "lng": 77.595,
+      "name": "Grand Terminal"
+    },
+    {
+      "cctv_active": false,
+      "crowd_level": "Low",
+      "has_sos_booth": false,
+      "historical_incident_rate": 0.32,
+      "id": "stop_06",
+      "lat": 12.958,
+      "lighting_quality": "Low",
+      "lng": 77.587,
+      "name": "Riverside Boulevard"
+    },
+    {
+      "cctv_active": true,
+      "crowd_level": "Medium",
+      "has_sos_booth": true,
+      "historical_incident_rate": 0.09,
+      "id": "stop_07",
+      "lat": 12.962,
+      "lighting_quality": "High",
+      "lng": 77.618,
+      "name": "University Quarter"
+    },
+    {
+      "cctv_active": false,
+      "crowd_level": "Low",
+      "has_sos_booth": false,
+      "historical_incident_rate": 0.22,
+      "id": "stop_08",
+      "lat": 12.974,
+      "lighting_quality": "Medium",
+      "lng": 77.572,
+      "name": "Westside Market"
+    },
+    {
+      "cctv_active": true,
+      "crowd_level": "Medium",
+      "has_sos_booth": true,
+      "historical_incident_rate": 0.07,
+      "id": "stop_09",
+      "lat": 12.945,
+      "lighting_quality": "High",
+      "lng": 77.598,
+      "name": "Southgate Junction"
+    },
+    {
+      "cctv_active": false,
+      "crowd_level": "Low",
+      "has_sos_booth": false,
+      "historical_incident_rate": 0.28,
+      "id": "stop_10",
+      "lat": 12.976,
+      "lighting_quality": "Low",
+      "lng": 77.632,
+      "name": "East Docks Station"
+    },
+    {
+      "cctv_active": false,
+      "crowd_level": "Low",
+      "has_sos_booth": false,
+      "historical_incident_rate": 0.19,
+      "id": "stop_11",
+      "lat": 12.952,
+      "lighting_quality": "Medium",
+      "lng": 77.638,
+      "name": "Harbor View Point"
+    },
+    {
+      "cctv_active": true,
+      "crowd_level": "Medium",
+      "has_sos_booth": true,
+      "historical_incident_rate": 0.06,
+      "id": "stop_12",
+      "lat": 12.935,
+      "lighting_quality": "High",
+      "lng": 77.62,
+      "name": "Silicon Gateway"
+    }
+  ],
+  "routes": [
+    {
+      "base_duration_min": 24,
+      "code": "N1",
+      "color": "#06b6d4",
+      "default_status": "On Time",
+      "delay_minutes": 0,
+      "description": "Rapid elevated metro corridor with monitored CCTV cars and security marshals.",
+      "frequency_min": 15,
+      "id": "route_n1",
+      "name": "Route N1 - Metro Express",
+      "next_departure_in_min": 15,
+      "next_departure_time": "00:00",
+      "night_safety_tier": "High",
+      "operating_hours": "21:00 - 05:00",
+      "status": "On Time",
+      "status_badge_color": "#10b981",
+      "stops": [
+        "stop_01",
+        "stop_02",
+        "stop_04",
+        "stop_05",
+        "stop_09"
+      ],
+      "type": "Metro Express"
+    },
+    {
+      "base_duration_min": 32,
+      "code": "N4",
+      "color": "#a855f7",
+      "default_status": "On Time",
+      "delay_minutes": 2,
+      "description": "Trans-city night bus connecting central hubs with eastern waterfront.",
+      "frequency_min": 20,
+      "id": "route_n4",
+      "name": "Route N4 - Midnight Cruiser",
+      "next_departure_in_min": 17,
+      "next_departure_time": "00:02",
+      "night_safety_tier": "Medium",
+      "operating_hours": "22:00 - 04:30",
+      "status": "On Time",
+      "status_badge_color": "#10b981",
+      "stops": [
+        "stop_02",
+        "stop_04",
+        "stop_07",
+        "stop_10"
+      ],
+      "type": "Night Bus"
+    },
+    {
+      "base_duration_min": 28,
+      "code": "N7",
+      "color": "#10b981",
+      "default_status": "On Time",
+      "delay_minutes": 0,
+      "description": "Cross-town electric feeder connecting educational campus with western commercial district.",
+      "frequency_min": 25,
+      "id": "route_n7",
+      "name": "Route N7 - Radial Feeder",
+      "next_departure_in_min": 5,
+      "next_departure_time": "23:50",
+      "night_safety_tier": "High",
+      "operating_hours": "21:30 - 05:00",
+      "status": "On Time",
+      "status_badge_color": "#10b981",
+      "stops": [
+        "stop_07",
+        "stop_04",
+        "stop_03",
+        "stop_08"
+      ],
+      "type": "Feeder Bus"
+    },
+    {
+      "base_duration_min": 26,
+      "code": "N9",
+      "color": "#f59e0b",
+      "default_status": "Delayed",
+      "delay_minutes": 14,
+      "description": "Southbound connector linking Riverside promenade to Silicon Gateway tech parks.",
+      "frequency_min": 18,
+      "id": "route_n9",
+      "name": "Route N9 - Night Owl Shuttle",
+      "next_departure_in_min": 23,
+      "next_departure_time": "00:08",
+      "night_safety_tier": "Medium",
+      "operating_hours": "22:00 - 05:30",
+      "status": "Delayed",
+      "status_badge_color": "#f59e0b",
+      "stops": [
+        "stop_06",
+        "stop_05",
+        "stop_09",
+        "stop_12"
+      ],
+      "type": "Rapid Shuttle"
+    },
+    {
+      "base_duration_min": 22,
+      "code": "N12",
+      "color": "#ec4899",
+      "default_status": "On Time",
+      "delay_minutes": 0,
+      "description": "Direct arterial link from central transit station to harbor docks and viewpoint.",
+      "frequency_min": 30,
+      "id": "route_n12",
+      "name": "Route N12 - Port Link",
+      "next_departure_in_min": 15,
+      "next_departure_time": "00:00",
+      "night_safety_tier": "Medium",
+      "operating_hours": "21:00 - 04:00",
+      "status": "On Time",
+      "status_badge_color": "#10b981",
+      "stops": [
+        "stop_04",
+        "stop_07",
+        "stop_11"
+      ],
+      "type": "Coastal Transit"
+    }
+  ],
+  "helpPoints": [
+    {
+      "address": "Opposite Central Interchange Gate 2",
+      "icon": "shield-check",
+      "id": "hp_01",
+      "lat": 12.9735,
+      "lng": 77.6025,
+      "name": "Central Transit Police Post",
+      "operating_hours": "24x7 Active",
+      "phone": "+1 800-112-911",
+      "type": "police",
+      "verified": true
+    },
+    {
+      "address": "Cyberia Ring Road Sector 4",
+      "icon": "shield-check",
+      "id": "hp_02",
+      "lat": 12.992,
+      "lng": 77.588,
+      "name": "North District Police Headquarters",
+      "operating_hours": "24x7 Active",
+      "phone": "+1 800-555-0101",
+      "type": "police",
+      "verified": true
+    },
+    {
+      "address": "Hospital Avenue near Grand Terminal",
+      "icon": "heart-pulse",
+      "id": "hp_03",
+      "lat": 12.968,
+      "lng": 77.591,
+      "name": "City General & Trauma Hospital",
+      "operating_hours": "24x7 Emergency",
+      "phone": "+1 800-555-CARE",
+      "type": "hospital",
+      "verified": true
+    },
+    {
+      "address": "St. Jude Square North Wing",
+      "icon": "heart-pulse",
+      "id": "hp_04",
+      "lat": 12.981,
+      "lng": 77.582,
+      "name": "St. Jude Emergency Medical Center",
+      "operating_hours": "24x7 Emergency",
+      "phone": "+1 800-555-0144",
+      "type": "hospital",
+      "verified": true
+    },
+    {
+      "address": "Westside Market Arcade #14",
+      "icon": "cross",
+      "id": "hp_05",
+      "lat": 12.975,
+      "lng": 77.576,
+      "name": "Apollo 24x7 Night Chemist",
+      "operating_hours": "24x7 Open",
+      "phone": "+1 800-555-DRUG",
+      "type": "pharmacy",
+      "verified": true
+    },
+    {
+      "address": "University Boulevard Station Complex",
+      "icon": "cross",
+      "id": "hp_06",
+      "lat": 12.96,
+      "lng": 77.615,
+      "name": "MediShield 24h Pharmacy & Clinic",
+      "operating_hours": "24x7 Open",
+      "phone": "+1 800-555-MEDS",
+      "type": "pharmacy",
+      "verified": true
+    },
+    {
+      "address": "Southgate Junction Highway Plaza",
+      "icon": "fuel",
+      "id": "hp_07",
+      "lat": 12.948,
+      "lng": 77.596,
+      "name": "Shell 24x7 Well-Lit Service & SOS Kiosk",
+      "operating_hours": "24x7 Manned",
+      "phone": "+1 800-555-PUMP",
+      "type": "petrol_pump",
+      "verified": true
+    },
+    {
+      "address": "Harbor Promenade Gate 4",
+      "icon": "shield-check",
+      "id": "hp_08",
+      "lat": 12.955,
+      "lng": 77.635,
+      "name": "Harbor Port Security & Emergency Kiosk",
+      "operating_hours": "24x7 Manned",
+      "phone": "+1 800-555-PORT",
+      "type": "police",
+      "verified": true
+    }
+  ],
+  "liveVehicles": [
+    {
+      "delay_min": 0,
+      "from_stop_idx": 0,
+      "id": "veh_N1_01",
+      "lat": 12.99332,
+      "lng": 77.58773,
+      "occupancy_pct": 42,
+      "progress": 0.38999999999999996,
+      "route_code": "N1",
+      "route_color": "#06b6d4",
+      "route_id": "route_n1",
+      "route_name": "Route N1 - Metro Express",
+      "speed_kmh": 38.0,
+      "status": "On Time",
+      "to_stop_idx": 1
+    },
+    {
+      "delay_min": 0,
+      "from_stop_idx": 2,
+      "id": "veh_N1_02",
+      "lat": 12.96682,
+      "lng": 77.59656,
+      "occupancy_pct": 28,
+      "progress": 0.74,
+      "route_code": "N1",
+      "route_color": "#06b6d4",
+      "route_id": "route_n1",
+      "route_name": "Route N1 - Metro Express",
+      "speed_kmh": 42.0,
+      "status": "On Time",
+      "to_stop_idx": 3
+    },
+    {
+      "delay_min": 2,
+      "from_stop_idx": 0,
+      "id": "veh_N4_01",
+      "lat": 12.98054,
+      "lng": 77.59551,
+      "occupancy_pct": 42,
+      "progress": 0.38999999999999996,
+      "route_code": "N4",
+      "route_color": "#a855f7",
+      "route_id": "route_n4",
+      "route_name": "Route N4 - Midnight Cruiser",
+      "speed_kmh": 38.0,
+      "status": "On Time",
+      "to_stop_idx": 1
+    },
+    {
+      "delay_min": 2,
+      "from_stop_idx": 2,
+      "id": "veh_N4_02",
+      "lat": 12.97236,
+      "lng": 77.62836,
+      "occupancy_pct": 28,
+      "progress": 0.74,
+      "route_code": "N4",
+      "route_color": "#a855f7",
+      "route_id": "route_n4",
+      "route_name": "Route N4 - Midnight Cruiser",
+      "speed_kmh": 42.0,
+      "status": "On Time",
+      "to_stop_idx": 3
+    },
+    {
+      "delay_min": 0,
+      "from_stop_idx": 0,
+      "id": "veh_N7_01",
+      "lat": 12.9659,
+      "lng": 77.61137,
+      "occupancy_pct": 42,
+      "progress": 0.38999999999999996,
+      "route_code": "N7",
+      "route_color": "#10b981",
+      "route_id": "route_n7",
+      "route_name": "Route N7 - Radial Feeder",
+      "speed_kmh": 38.0,
+      "status": "On Time",
+      "to_stop_idx": 1
+    },
+    {
+      "delay_min": 0,
+      "from_stop_idx": 2,
+      "id": "veh_N7_02",
+      "lat": 12.97504,
+      "lng": 77.57512,
+      "occupancy_pct": 28,
+      "progress": 0.74,
+      "route_code": "N7",
+      "route_color": "#10b981",
+      "route_id": "route_n7",
+      "route_name": "Route N7 - Radial Feeder",
+      "speed_kmh": 42.0,
+      "status": "On Time",
+      "to_stop_idx": 3
+    },
+    {
+      "delay_min": 14,
+      "from_stop_idx": 0,
+      "id": "veh_N9_01",
+      "lat": 12.96073,
+      "lng": 77.59012,
+      "occupancy_pct": 42,
+      "progress": 0.38999999999999996,
+      "route_code": "N9",
+      "route_color": "#f59e0b",
+      "route_id": "route_n9",
+      "route_name": "Route N9 - Night Owl Shuttle",
+      "speed_kmh": 38.0,
+      "status": "Delayed",
+      "to_stop_idx": 1
+    },
+    {
+      "delay_min": 14,
+      "from_stop_idx": 2,
+      "id": "veh_N9_02",
+      "lat": 12.9376,
+      "lng": 77.61428,
+      "occupancy_pct": 28,
+      "progress": 0.74,
+      "route_code": "N9",
+      "route_color": "#f59e0b",
+      "route_id": "route_n9",
+      "route_name": "Route N9 - Night Owl Shuttle",
+      "speed_kmh": 42.0,
+      "status": "Delayed",
+      "to_stop_idx": 3
+    },
+    {
+      "delay_min": 0,
+      "from_stop_idx": 0,
+      "id": "veh_N12_01",
+      "lat": 12.9681,
+      "lng": 77.60763,
+      "occupancy_pct": 42,
+      "progress": 0.38999999999999996,
+      "route_code": "N12",
+      "route_color": "#ec4899",
+      "route_id": "route_n12",
+      "route_name": "Route N12 - Port Link",
+      "speed_kmh": 38.0,
+      "status": "On Time",
+      "to_stop_idx": 1
+    }
+  ],
+  "contacts": [
+    {
+      "created_at": "2026-09-19T12:56:10.939700",
+      "id": "tc_01",
+      "is_primary": 1,
+      "name": "Maya Lin",
+      "phone": "+1 (555) 234-5678",
+      "relation": "Sister",
+      "user_id": "user_demo_778"
+    },
+    {
+      "created_at": "2026-09-19T12:56:10.939700",
+      "id": "tc_02",
+      "is_primary": 0,
+      "name": "David Miller",
+      "phone": "+1 (555) 876-5432",
+      "relation": "Parent",
+      "user_id": "user_demo_778"
+    },
+    {
+      "created_at": "2026-09-19T12:56:10.939700",
+      "id": "tc_03",
+      "is_primary": 0,
+      "name": "Priya Sen",
+      "phone": "+1 (555) 345-6789",
+      "relation": "Roommate",
+      "user_id": "user_demo_778"
+    }
+  ],
+  "precomputedRisk": {
+    "route_n1": {
+      "cluster_tier": 2,
+      "metrics": {
+        "cctv_active": true,
+        "crowd_level": "Medium",
+        "delay_minutes": 0,
+        "frequency_min": 15,
+        "lighting": "High",
+        "sos_booth": true
+      },
+      "predicted_delay": {
+        "confidence_pct": 89,
+        "is_delayed": true,
+        "message": "Next vehicle likely 10 min late",
+        "predicted_delay_exact": 9.8,
+        "predicted_delay_minutes": 10
+      },
+      "risk_score": 22,
+      "risk_tier": "Low",
+      "route_id": "route_n1",
+      "route_name": "Route N1 - Metro Express",
+      "tier_color": "#16A34A",
+      "top_factors": [
+        "Late-night departure corridor with reduced frequency"
+      ]
+    },
+    "route_n4": {
+      "cluster_tier": 2,
+      "metrics": {
+        "cctv_active": true,
+        "crowd_level": "Medium",
+        "delay_minutes": 2,
+        "frequency_min": 20,
+        "lighting": "High",
+        "sos_booth": true
+      },
+      "predicted_delay": {
+        "confidence_pct": 89,
+        "is_delayed": true,
+        "message": "Next vehicle likely 9 min late",
+        "predicted_delay_exact": 9.1,
+        "predicted_delay_minutes": 9
+      },
+      "risk_score": 29,
+      "risk_tier": "Low",
+      "route_id": "route_n4",
+      "route_name": "Route N4 - Midnight Cruiser",
+      "tier_color": "#16A34A",
+      "top_factors": [
+        "Late-night departure corridor with reduced frequency",
+        "2 active safety reports logged by recent passengers"
+      ]
+    },
+    "route_n7": {
+      "cluster_tier": 2,
+      "metrics": {
+        "cctv_active": true,
+        "crowd_level": "Medium",
+        "delay_minutes": 0,
+        "frequency_min": 25,
+        "lighting": "High",
+        "sos_booth": true
+      },
+      "predicted_delay": {
+        "confidence_pct": 89,
+        "is_delayed": true,
+        "message": "Next vehicle likely 9 min late",
+        "predicted_delay_exact": 9.0,
+        "predicted_delay_minutes": 9
+      },
+      "risk_score": 23,
+      "risk_tier": "Low",
+      "route_id": "route_n7",
+      "route_name": "Route N7 - Radial Feeder",
+      "tier_color": "#16A34A",
+      "top_factors": [
+        "Late-night departure corridor with reduced frequency"
+      ]
+    },
+    "route_n9": {
+      "cluster_tier": 2,
+      "metrics": {
+        "cctv_active": true,
+        "crowd_level": "Medium",
+        "delay_minutes": 14,
+        "frequency_min": 18,
+        "lighting": "High",
+        "sos_booth": true
+      },
+      "predicted_delay": {
+        "confidence_pct": 89,
+        "is_delayed": true,
+        "message": "Next vehicle likely 10 min late",
+        "predicted_delay_exact": 9.6,
+        "predicted_delay_minutes": 10
+      },
+      "risk_score": 35,
+      "risk_tier": "Medium",
+      "route_id": "route_n9",
+      "route_name": "Route N9 - Night Owl Shuttle",
+      "tier_color": "#EA580C",
+      "top_factors": [
+        "Late-night departure corridor with reduced frequency",
+        "Excessive platform waiting vulnerability due to 14 min delay",
+        "2 active safety reports logged by recent passengers"
+      ]
+    },
+    "route_n12": {
+      "cluster_tier": 2,
+      "metrics": {
+        "cctv_active": true,
+        "crowd_level": "Medium",
+        "delay_minutes": 0,
+        "frequency_min": 30,
+        "lighting": "High",
+        "sos_booth": true
+      },
+      "predicted_delay": {
+        "confidence_pct": 89,
+        "is_delayed": true,
+        "message": "Next vehicle likely 10 min late",
+        "predicted_delay_exact": 9.8,
+        "predicted_delay_minutes": 10
+      },
+      "risk_score": 23,
+      "risk_tier": "Low",
+      "route_id": "route_n12",
+      "route_name": "Route N12 - Port Link",
+      "tier_color": "#16A34A",
+      "top_factors": [
+        "Late-night departure corridor with reduced frequency"
+      ]
+    }
+  },
+  "alternatives": [],
+  "rankedRoutes": [
+    {
+      "ai_badge": "Safest",
+      "badge_chip": "mint",
+      "code": "N1",
+      "color": "#06b6d4",
+      "delay_minutes": 0,
+      "predicted_delay": {
+        "confidence_pct": 89,
+        "is_delayed": true,
+        "message": "Next vehicle likely 10 min late",
+        "predicted_delay_exact": 9.8,
+        "predicted_delay_minutes": 10
+      },
+      "risk_score": 22,
+      "risk_tier": "Low",
+      "route_id": "route_n1",
+      "route_name": "Route N1 - Metro Express",
+      "status": "On Time",
+      "top_factors": [
+        "Late-night departure corridor with reduced frequency"
+      ],
+      "total_eta_min": 39,
+      "wait_time_min": 15
+    }
+  ],
+  "bestTime": {
+    "recommended_slot": "20 mins ago",
+    "risk_reduction_pts": 7,
+    "summary": "Departing 20 mins ago reduces platform wait to 5m with risk score of 15.",
+    "time_saved_min": 10
+  },
+  "hotspots": [
+    {
+      "cctv_active": true,
+      "cluster_id": 2,
+      "cluster_label": "High-Vulnerability Hotspot",
+      "crowd_level": "Medium",
+      "incident_rate": 0.08,
+      "lat": 12.998,
+      "lighting_quality": "High",
+      "lng": 77.585,
+      "name": "North Tech Hub",
+      "stop_id": "stop_01"
+    },
+    {
+      "cctv_active": true,
+      "cluster_id": 0,
+      "cluster_label": "Standard Transit Stop",
+      "crowd_level": "High",
+      "incident_rate": 0.14,
+      "lat": 12.986,
+      "lighting_quality": "Medium",
+      "lng": 77.592,
+      "name": "Cyberia Crossing",
+      "stop_id": "stop_02"
+    },
+    {
+      "cctv_active": true,
+      "cluster_id": 2,
+      "cluster_label": "High-Vulnerability Hotspot",
+      "crowd_level": "Medium",
+      "incident_rate": 0.06,
+      "lat": 12.978,
+      "lighting_quality": "High",
+      "lng": 77.584,
+      "name": "St. Jude Square",
+      "stop_id": "stop_03"
+    },
+    {
+      "cctv_active": true,
+      "cluster_id": 0,
+      "cluster_label": "Standard Transit Stop",
+      "crowd_level": "High",
+      "incident_rate": 0.04,
+      "lat": 12.972,
+      "lighting_quality": "High",
+      "lng": 77.601,
+      "name": "Central Interchange",
+      "stop_id": "stop_04"
+    },
+    {
+      "cctv_active": true,
+      "cluster_id": 0,
+      "cluster_label": "Standard Transit Stop",
+      "crowd_level": "High",
+      "incident_rate": 0.05,
+      "lat": 12.965,
+      "lighting_quality": "High",
+      "lng": 77.595,
+      "name": "Grand Terminal",
+      "stop_id": "stop_05"
+    },
+    {
+      "cctv_active": false,
+      "cluster_id": 1,
+      "cluster_label": "Monitored Hub",
+      "crowd_level": "Low",
+      "incident_rate": 0.32,
+      "lat": 12.958,
+      "lighting_quality": "Low",
+      "lng": 77.587,
+      "name": "Riverside Boulevard",
+      "stop_id": "stop_06"
+    },
+    {
+      "cctv_active": true,
+      "cluster_id": 2,
+      "cluster_label": "High-Vulnerability Hotspot",
+      "crowd_level": "Medium",
+      "incident_rate": 0.09,
+      "lat": 12.962,
+      "lighting_quality": "High",
+      "lng": 77.618,
+      "name": "University Quarter",
+      "stop_id": "stop_07"
+    },
+    {
+      "cctv_active": false,
+      "cluster_id": 1,
+      "cluster_label": "Monitored Hub",
+      "crowd_level": "Low",
+      "incident_rate": 0.22,
+      "lat": 12.974,
+      "lighting_quality": "Medium",
+      "lng": 77.572,
+      "name": "Westside Market",
+      "stop_id": "stop_08"
+    },
+    {
+      "cctv_active": true,
+      "cluster_id": 2,
+      "cluster_label": "High-Vulnerability Hotspot",
+      "crowd_level": "Medium",
+      "incident_rate": 0.07,
+      "lat": 12.945,
+      "lighting_quality": "High",
+      "lng": 77.598,
+      "name": "Southgate Junction",
+      "stop_id": "stop_09"
+    },
+    {
+      "cctv_active": false,
+      "cluster_id": 1,
+      "cluster_label": "Monitored Hub",
+      "crowd_level": "Low",
+      "incident_rate": 0.28,
+      "lat": 12.976,
+      "lighting_quality": "Low",
+      "lng": 77.632,
+      "name": "East Docks Station",
+      "stop_id": "stop_10"
+    },
+    {
+      "cctv_active": false,
+      "cluster_id": 1,
+      "cluster_label": "Monitored Hub",
+      "crowd_level": "Low",
+      "incident_rate": 0.19,
+      "lat": 12.952,
+      "lighting_quality": "Medium",
+      "lng": 77.638,
+      "name": "Harbor View Point",
+      "stop_id": "stop_11"
+    },
+    {
+      "cctv_active": true,
+      "cluster_id": 2,
+      "cluster_label": "High-Vulnerability Hotspot",
+      "crowd_level": "Medium",
+      "incident_rate": 0.06,
+      "lat": 12.935,
+      "lighting_quality": "High",
+      "lng": 77.62,
+      "name": "Silicon Gateway",
+      "stop_id": "stop_12"
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "name": "nightshield-suite",
+  "version": "1.0.0",
+  "description": "NightShield: Late-Night Journey Safety Companion (Team HarvestHub - SC-03)",
+  "scripts": {
+    "start": "python start.py",
+    "dev": "python start.py",
+    "backend": "python backend/app.py",
+    "frontend": "cd frontend && npm run dev",
+    "build": "cd frontend && npm install && npm run build"
+  },
+  "keywords": ["night-shield", "transit-safety", "ai-risk", "scikit-learn", "react", "vite"],
+  "author": "HarvestHub",
+  "license": "MIT"
+}
