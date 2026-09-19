@@ -1,10 +1,29 @@
-import numpy as np
-import pandas as pd
-from sklearn.ensemble import RandomForestClassifier, GradientBoostingRegressor
-from sklearn.cluster import KMeans
 import json
 import os
-import joblib
+import math
+
+# Optional heavy ML imports (used for offline training / local dev)
+try:
+    import numpy as np
+    import pandas as pd
+    from sklearn.ensemble import RandomForestClassifier, GradientBoostingRegressor
+    from sklearn.cluster import KMeans
+    import joblib
+    SKLEARN_AVAILABLE = True
+except ImportError:
+    SKLEARN_AVAILABLE = False
+
+
+def _eval_tree_val(tree, features):
+    """Fast zero-dependency decision tree traversal"""
+    node = 0
+    while tree['f'][node] >= 0:
+        if features[tree['f'][node]] <= tree['t'][node]:
+            node = tree['cl'][node]
+        else:
+            node = tree['cr'][node]
+    return tree['v'][node]
+
 
 class RiskAssessmentEngine:
     def __init__(self, city_config_path=None):
@@ -15,7 +34,8 @@ class RiskAssessmentEngine:
         self.city_config = self._load_city_config(city_config_path)
 
         self.csv_path = os.path.join(self.base_dir, 'data', 'historical_night_commutes.csv')
-        self.models_bundle_path = os.path.join(self.base_dir, 'data', 'models_bundle.joblib')
+        self.models_json_path = os.path.join(self.base_dir, 'data', 'models_bundle.json')
+        self.models_joblib_path = os.path.join(self.base_dir, 'data', 'models_bundle.joblib')
 
         self.feature_names = [
             'hour_risk_weight',
@@ -27,23 +47,49 @@ class RiskAssessmentEngine:
             'reported_concerns_cnt'
         ]
 
-        # Load pre-trained models from joblib bundle (zero startup training)
-        if os.path.exists(self.models_bundle_path):
-            bundle = joblib.load(self.models_bundle_path)
-            self.risk_classifier = bundle['risk_classifier']
-            self.delay_regressor = bundle['delay_regressor']
-            self.hotspot_kmeans = bundle['hotspot_kmeans']
-            self.stop_clusters = bundle.get('stop_clusters', {})
-            print(f"AI Risk models successfully loaded from {self.models_bundle_path}")
-        else:
-            # Fallback only if model bundle missing
-            print("Warning: Pre-trained models not found; initializing offline models...")
-            self.risk_classifier = RandomForestClassifier(n_estimators=100, max_depth=6, random_state=42)
-            self.delay_regressor = GradientBoostingRegressor(n_estimators=100, max_depth=4, random_state=42)
-            self.hotspot_kmeans = KMeans(n_clusters=3, random_state=42, n_init=10)
-            if os.path.exists(self.csv_path):
-                self._train_models()
-            self._fit_hotspots()
+        self.pure_trees = False
+        self.json_bundle = None
+        self.stop_clusters = {}
+
+        # 1. First priority: Lightweight JSON model bundle (zero binary dependencies, <1MB)
+        if os.path.exists(self.models_json_path):
+            try:
+                with open(self.models_json_path, 'r', encoding='utf-8') as f:
+                    self.json_bundle = json.load(f)
+                self.pure_trees = True
+                self.stop_clusters = self.json_bundle.get('stop_clusters', {})
+                print(f"AI Risk models successfully loaded from JSON bundle ({self.models_json_path}) [Zero-dependency mode]")
+            except Exception as e:
+                print(f"Notice loading JSON model bundle: {e}")
+
+        # 2. Second priority: Joblib bundle if sklearn is available
+        if not self.pure_trees and SKLEARN_AVAILABLE and os.path.exists(self.models_joblib_path):
+            try:
+                bundle = joblib.load(self.models_joblib_path)
+                self.risk_classifier = bundle['risk_classifier']
+                self.delay_regressor = bundle['delay_regressor']
+                self.hotspot_kmeans = bundle['hotspot_kmeans']
+                self.stop_clusters = bundle.get('stop_clusters', {})
+                print(f"AI Risk models successfully loaded from joblib ({self.models_joblib_path})")
+            except Exception as e:
+                print(f"Notice loading joblib model: {e}")
+
+        # 3. Third priority: Train or fallback
+        if not self.pure_trees and not hasattr(self, 'risk_classifier'):
+            if SKLEARN_AVAILABLE:
+                self.risk_classifier = RandomForestClassifier(n_estimators=100, max_depth=6, random_state=42)
+                self.delay_regressor = GradientBoostingRegressor(n_estimators=100, max_depth=4, random_state=42)
+                self.hotspot_kmeans = KMeans(n_clusters=3, random_state=42, n_init=10)
+                if os.path.exists(self.csv_path):
+                    self._train_models()
+                self._fit_hotspots()
+            else:
+                # Default cluster mapping for stops
+                self.stop_clusters = {
+                    'stop_01': 2, 'stop_02': 0, 'stop_03': 2, 'stop_04': 0,
+                    'stop_05': 0, 'stop_06': 1, 'stop_07': 2, 'stop_08': 1,
+                    'stop_09': 2, 'stop_10': 1, 'stop_11': 1, 'stop_12': 2
+                }
 
     def _load_city_config(self, path):
         if os.path.exists(path):
@@ -61,6 +107,8 @@ class RiskAssessmentEngine:
         return 1.0
 
     def _train_models(self):
+        if not SKLEARN_AVAILABLE:
+            return
         print(f"Training AI Models on {self.csv_path}...")
         df = pd.read_csv(self.csv_path)
 
@@ -96,7 +144,8 @@ class RiskAssessmentEngine:
         print("AI Risk Classifier & Delay Regressor trained successfully.")
 
     def _fit_hotspots(self):
-        # Cluster stops by historical delays, incident rates, and crowd level
+        if not SKLEARN_AVAILABLE:
+            return
         stops = self.city_config.get('stops', [])
         stop_features = []
         for s in stops:
@@ -110,6 +159,47 @@ class RiskAssessmentEngine:
         for s, cluster_id in zip(stops, clusters):
             self.stop_clusters[s['id']] = int(cluster_id)
         print(f"KMeans clustered {len(stops)} stops into 3 safety categories.")
+
+    def _predict_classifier_proba(self, feat_list):
+        """Returns [p_low, p_med, p_high] using pure trees or sklearn"""
+        if self.pure_trees and self.json_bundle:
+            trees = self.json_bundle['clf']['trees']
+            acc = [0.0] * len(self.json_bundle['clf']['classes'])
+            for tree in trees:
+                val = _eval_tree_val(tree, feat_list)
+                tot = sum(val)
+                if tot > 0:
+                    for i in range(len(acc)):
+                        acc[i] += val[i] / tot
+            num_trees = len(trees)
+            return [x / num_trees for x in acc]
+        elif hasattr(self, 'risk_classifier') and SKLEARN_AVAILABLE:
+            X_input = pd.DataFrame([dict(zip(self.feature_names, feat_list))])
+            return self.risk_classifier.predict_proba(X_input)[0].tolist()
+        else:
+            # Calibrated mathematical fallback
+            hour_wt, delay, crowd, freq, incident, light, concerns = feat_list
+            base_risk = (hour_wt * 12.0) + (delay * 0.8) + ((2 - light) * 10.0) + ((2 - crowd) * 8.0) + (incident * 40.0)
+            p_high = max(0.05, min(0.90, base_risk / 100.0))
+            p_low = max(0.05, min(0.90, (1.0 - p_high) * 0.6))
+            p_med = max(0.05, 1.0 - p_high - p_low)
+            return [p_low, p_med, p_high]
+
+    def _predict_delay_raw(self, feat_delay):
+        """Returns predicted delay using pure trees or sklearn"""
+        if self.pure_trees and self.json_bundle:
+            val = self.json_bundle['reg']['init_val']
+            lr = self.json_bundle['reg']['learning_rate']
+            for tree in self.json_bundle['reg']['trees']:
+                val += lr * _eval_tree_val(tree, feat_delay)[0]
+            return float(val)
+        elif hasattr(self, 'delay_regressor') and SKLEARN_AVAILABLE:
+            cols = ['hour_risk_weight', 'route_frequency_min', 'crowd_level_code', 'lighting_code', 'stop_incident_rate']
+            X_input = pd.DataFrame([dict(zip(cols, feat_delay))])
+            return float(self.delay_regressor.predict(X_input)[0])
+        else:
+            hour_wt, freq, crowd, light, incident = feat_delay
+            return max(1.0, (hour_wt * 2.5) + (freq * 0.15) + (incident * 10.0))
 
     def predict_delay(self, route_id, stop_id, current_hour=23):
         stops_dict = {s['id']: s for s in self.city_config.get('stops', [])}
@@ -126,16 +216,8 @@ class RiskAssessmentEngine:
         incident_rate = stop.get('historical_incident_rate', 0.1)
         freq = route.get('frequency_min', 20)
 
-        X_input = pd.DataFrame([{
-            'hour_risk_weight': hour_wt,
-            'route_frequency_min': freq,
-            'crowd_level_code': crowd_val,
-            'lighting_code': lighting_val,
-            'stop_incident_rate': incident_rate
-        }])
-
-        pred_delay = float(self.delay_regressor.predict(X_input)[0])
-        pred_delay = max(0.0, round(pred_delay, 1))
+        feat_delay = [hour_wt, freq, crowd_val, lighting_val, incident_rate]
+        pred_delay = max(0.0, round(self._predict_delay_raw(feat_delay), 1))
         
         # Confidence interval estimation
         confidence = 94 if pred_delay < 5 else 89 if pred_delay < 15 else 82
@@ -166,19 +248,19 @@ class RiskAssessmentEngine:
         freq = route.get('frequency_min', 20)
         hour_wt = self._compute_hour_risk_weight(current_hour)
 
-        input_data = pd.DataFrame([{
-            'hour_risk_weight': hour_wt,
-            'delay_minutes': delay,
-            'crowd_level_code': crowd_val,
-            'route_frequency_min': freq,
-            'stop_incident_rate': incident_rate,
-            'lighting_code': lighting_val,
-            'reported_concerns_cnt': recent_concerns_count
-        }])
+        feat_list = [
+            hour_wt,
+            delay,
+            crowd_val,
+            freq,
+            incident_rate,
+            lighting_val,
+            recent_concerns_count
+        ]
 
-        probs = self.risk_classifier.predict_proba(input_data)[0]
-        class_centers = np.array([16.0, 48.0, 82.0])
-        score = float(np.sum(probs * class_centers))
+        probs = self._predict_classifier_proba(feat_list)
+        class_centers = [16.0, 48.0, 82.0]
+        score = float(sum(p * c for p, c in zip(probs, class_centers)))
 
         if delay > 15:
             score += min(18, (delay - 15) * 0.9)
@@ -187,7 +269,7 @@ class RiskAssessmentEngine:
         if orig_stop.get('has_sos_booth') and orig_stop.get('cctv_active'):
             score -= 5
 
-        score = int(np.clip(round(score), 6, 96))
+        score = int(max(6, min(96, round(score))))
 
         if score < 35:
             tier = 'Low'
