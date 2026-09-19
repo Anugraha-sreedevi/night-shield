@@ -4,7 +4,7 @@ from sklearn.ensemble import RandomForestClassifier, GradientBoostingRegressor
 from sklearn.cluster import KMeans
 import json
 import os
-from generate_dataset import generate_commute_dataset
+import joblib
 
 class RiskAssessmentEngine:
     def __init__(self, city_config_path=None):
@@ -15,13 +15,7 @@ class RiskAssessmentEngine:
         self.city_config = self._load_city_config(city_config_path)
 
         self.csv_path = os.path.join(self.base_dir, 'data', 'historical_night_commutes.csv')
-        if not os.path.exists(self.csv_path):
-            generate_commute_dataset()
-
-        # Models
-        self.risk_classifier = RandomForestClassifier(n_estimators=100, max_depth=6, random_state=42)
-        self.delay_regressor = GradientBoostingRegressor(n_estimators=100, max_depth=4, random_state=42)
-        self.hotspot_kmeans = KMeans(n_clusters=3, random_state=42, n_init=10)
+        self.models_bundle_path = os.path.join(self.base_dir, 'data', 'models_bundle.joblib')
 
         self.feature_names = [
             'hour_risk_weight',
@@ -33,8 +27,23 @@ class RiskAssessmentEngine:
             'reported_concerns_cnt'
         ]
 
-        self._train_models()
-        self._fit_hotspots()
+        # Load pre-trained models from joblib bundle (zero startup training)
+        if os.path.exists(self.models_bundle_path):
+            bundle = joblib.load(self.models_bundle_path)
+            self.risk_classifier = bundle['risk_classifier']
+            self.delay_regressor = bundle['delay_regressor']
+            self.hotspot_kmeans = bundle['hotspot_kmeans']
+            self.stop_clusters = bundle.get('stop_clusters', {})
+            print(f"AI Risk models successfully loaded from {self.models_bundle_path}")
+        else:
+            # Fallback only if model bundle missing
+            print("Warning: Pre-trained models not found; initializing offline models...")
+            self.risk_classifier = RandomForestClassifier(n_estimators=100, max_depth=6, random_state=42)
+            self.delay_regressor = GradientBoostingRegressor(n_estimators=100, max_depth=4, random_state=42)
+            self.hotspot_kmeans = KMeans(n_clusters=3, random_state=42, n_init=10)
+            if os.path.exists(self.csv_path):
+                self._train_models()
+            self._fit_hotspots()
 
     def _load_city_config(self, path):
         if os.path.exists(path):

@@ -19,7 +19,7 @@ import AICompanionChat from './components/AICompanionChat';
 import { AlertTriangle, RefreshCw, Sparkles } from 'lucide-react';
 
 export default function App() {
-  const { activeTab, setActiveTab, backendError, refreshTransitData } = useApp();
+  const { activeTab, setActiveTab, isOfflineDemo, refreshTransitData } = useApp();
   const [trackToken, setTrackToken] = useState(null);
   const [companionOpen, setCompanionOpen] = useState(false);
 
@@ -36,12 +36,11 @@ export default function App() {
     }
   }, [setActiveTab]);
 
-  // If visiting public guardian tracking link directly
-  if (trackToken) {
-    return <PublicTrackView token={trackToken} />;
-  }
-
   const renderActiveView = () => {
+    if (trackToken) {
+      return <PublicTrackView token={trackToken} onBack={() => setTrackToken(null)} />;
+    }
+
     switch (activeTab) {
       case 'plan':
         return <PlanJourneyView />;
@@ -65,18 +64,21 @@ export default function App() {
       {/* Top Header */}
       <TopHeader />
 
-      {/* Backend Notice Banner if unreachable */}
-      {backendError && (
-        <div className="bg-[#FFE9D6] border-b border-[#EA580C]/20 px-4 py-2 text-xs text-[#EA580C] font-semibold flex items-center justify-between z-20">
+      {/* Small Offline Demo Data Chip (Never-empty fallback state) */}
+      {isOfflineDemo && (
+        <div className="bg-[#FAF8FF] dark:bg-[#1E1B2E] border-b border-[#8B5CF6]/15 px-4 py-1.5 text-xs text-[#6B5A8E] dark:text-[#C5BFE0] flex items-center justify-between z-20">
           <div className="flex items-center gap-2">
-            <AlertTriangle className="w-4 h-4 shrink-0 text-[#EA580C]" />
-            <span>{backendError}</span>
+            <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-[#ECEAF8] dark:bg-[#2A2445] text-[#8B5CF6] dark:text-[#A78BFA] text-[10px] font-bold border border-[#8B5CF6]/25">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#8B5CF6] animate-pulse"></span>
+              Offline demo data
+            </span>
+            <span className="hidden sm:inline text-[11px] opacity-80">Precomputed transit grid & Scikit-learn AI predictions active</span>
           </div>
           <button
             onClick={refreshTransitData}
-            className="px-3 py-1 bg-white hover:bg-slate-50 border border-[#EA580C]/30 rounded-full font-bold text-[11px] text-[#EA580C] flex items-center gap-1 shadow-sm"
+            className="px-2.5 py-0.5 bg-white dark:bg-[#25203A] hover:bg-slate-50 border border-[#8B5CF6]/30 rounded-full font-bold text-[10px] text-[#8B5CF6] flex items-center gap-1 shadow-xs transition"
           >
-            <RefreshCw className="w-3 h-3" /> Retry
+            <RefreshCw className="w-2.5 h-2.5" /> Reconnect
           </button>
         </div>
       )}

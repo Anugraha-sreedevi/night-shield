@@ -14,11 +14,14 @@ from transit_engine import TransitEngine
 from sms_service import send_guardian_missed_arrival_alert, send_sos_broadcast
 
 app = Flask(__name__)
-CORS(app, resources={r"/api/*": {"origins": "*"}})
+CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
 
-# Initialize Engine & Database
-init_db()
-seed_database()
+# Safe DB initialization (supports serverless /tmp fallback)
+try:
+    init_db()
+    seed_database()
+except Exception as e:
+    print(f"Database initialization notice: {e}")
 
 city_config_path = os.path.join(os.path.dirname(__file__), 'data', 'city_config.json')
 risk_engine = RiskAssessmentEngine(city_config_path)
@@ -34,8 +37,35 @@ def vehicle_loop():
             print("Vehicle loop error:", e)
             time.sleep(5.0)
 
-sim_thread = threading.Thread(target=vehicle_loop, daemon=True)
-sim_thread.start()
+# Only start background thread if not in serverless freeze mode
+if not os.environ.get('VERCEL'):
+    sim_thread = threading.Thread(target=vehicle_loop, daemon=True)
+    sim_thread.start()
+
+# Prefix middleware to handle both /api/* and direct /* routing transparently
+class ApiPrefixMiddleware:
+    def __init__(self, wsgi_app):
+        self.wsgi_app = wsgi_app
+
+    def __call__(self, environ, start_response):
+        path = environ.get('PATH_INFO', '')
+        if not path.startswith('/api'):
+            environ['PATH_INFO'] = '/api' + (path if path.startswith('/') else '/' + path)
+        return self.wsgi_app(environ, start_response)
+
+app.wsgi_app = ApiPrefixMiddleware(app.wsgi_app)
+
+# ----------------- HEALTH ENDPOINTS -----------------
+@app.route('/api', methods=['GET'])
+@app.route('/api/', methods=['GET'])
+@app.route('/api/health', methods=['GET'])
+def health():
+    return jsonify({
+        "status": "ok",
+        "app": "NightShield AI Backend",
+        "version": "1.0.0",
+        "timestamp": datetime.now().isoformat()
+    }), 200
 
 # Helper to verify auth token
 def get_current_user_id():

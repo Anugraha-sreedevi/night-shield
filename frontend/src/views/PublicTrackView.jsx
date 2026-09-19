@@ -205,7 +205,7 @@ export default function PublicTrackView({ token: propToken }) {
         </div>
 
         {/* Right Map Canvas */}
-        <div className="flex-1 min-h-[450px]">
+        <div className="flex-1 w-full min-h-[70vh] h-[70vh] lg:h-full relative">
           <MapView
             selectedRouteId={journey.route_id}
             userPos={currentPos}

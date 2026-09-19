@@ -140,6 +140,9 @@
 
 /* Leaflet Map Light Styling - Clean, high contrast */
 .leaflet-container {
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 100% !important;
   background: #E8EBF2 !important;
   font-family: var(--font-family) !important;
   border-radius: var(--card-radius);

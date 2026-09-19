@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { api } from '../api/client';
+import fallbackData from '../data/fallbackData.json';
 
 const AppContext = createContext(null);
 
@@ -12,13 +13,14 @@ export const AppProvider = ({ children }) => {
   });
   
   const [activeTab, setActiveTab] = useState('plan'); // 'plan', 'active', 'contacts', 'feedback', 'authority', 'roadmap'
-  const [stops, setStops] = useState([]);
-  const [routes, setRoutes] = useState([]);
-  const [helpPoints, setHelpPoints] = useState([]);
-  const [liveVehicles, setLiveVehicles] = useState([]);
-  const [contacts, setContacts] = useState([]);
+  const [stops, setStops] = useState(() => fallbackData.stops || []);
+  const [routes, setRoutes] = useState(() => fallbackData.routes || []);
+  const [helpPoints, setHelpPoints] = useState(() => fallbackData.helpPoints || []);
+  const [liveVehicles, setLiveVehicles] = useState(() => fallbackData.liveVehicles || []);
+  const [contacts, setContacts] = useState(() => fallbackData.contacts || []);
   const [activeJourney, setActiveJourney] = useState(null);
   const [simulatedClock, setSimulatedClock] = useState('23:45:00');
+  const [isOfflineDemo, setIsOfflineDemo] = useState(false);
   
   // Dark / Light Theme Mode
   const [theme, setTheme] = useState(() => {
@@ -77,14 +79,29 @@ export const AppProvider = ({ children }) => {
         api.contacts.getAll(),
       ]);
 
-      setStops(stopsRes.stops || []);
-      setRoutes(routesRes || []);
-      setHelpPoints(helpRes || []);
-      setContacts(contactsRes || []);
+      if (stopsRes && stopsRes.stops && stopsRes.stops.length > 0) {
+        setStops(stopsRes.stops);
+      }
+      if (routesRes && routesRes.length > 0) {
+        setRoutes(routesRes);
+      }
+      if (helpRes && helpRes.length > 0) {
+        setHelpPoints(helpRes);
+      }
+      if (contactsRes && contactsRes.length > 0) {
+        setContacts(contactsRes);
+      }
+      setIsOfflineDemo(false);
       setBackendError(null);
     } catch (err) {
-      console.error('Failed to load transit data:', err);
-      setBackendError('Could not reach NightShield backend API. Retrying...');
+      console.warn('Backend API call notice, activating offline demo data grid:', err);
+      setStops(fallbackData.stops || []);
+      setRoutes(fallbackData.routes || []);
+      setHelpPoints(fallbackData.helpPoints || []);
+      setContacts(fallbackData.contacts || []);
+      setLiveVehicles(fallbackData.liveVehicles || []);
+      setIsOfflineDemo(true);
+      setBackendError(null);
     }
   }, []);
 
@@ -295,6 +312,7 @@ export const AppProvider = ({ children }) => {
         privacyModalOpen,
         setPrivacyModalOpen,
         backendError,
+        isOfflineDemo,
         refreshTransitData,
         theme,
         toggleTheme,

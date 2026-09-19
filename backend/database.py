@@ -4,10 +4,23 @@ import hashlib
 import json
 from datetime import datetime
 
-DB_PATH = os.path.join(os.path.dirname(__file__), 'night_shield.db')
+import shutil
+
+def get_db_path():
+    # If running in Vercel, serverless, or read-only filesystem, use /tmp
+    if os.environ.get('VERCEL') or not os.access(os.path.dirname(__file__), os.W_OK):
+        tmp_db = os.path.join('/tmp', 'night_shield.db')
+        src_db = os.path.join(os.path.dirname(__file__), 'night_shield.db')
+        if not os.path.exists(tmp_db) and os.path.exists(src_db):
+            try:
+                shutil.copy2(src_db, tmp_db)
+            except Exception as e:
+                print(f"Notice: Failed to copy template DB to /tmp: {e}")
+        return tmp_db
+    return os.path.join(os.path.dirname(__file__), 'night_shield.db')
 
 def get_db_connection():
-    conn = sqlite3.connect(DB_PATH)
+    conn = sqlite3.connect(get_db_path())
     conn.row_factory = sqlite3.Row
     return conn
 

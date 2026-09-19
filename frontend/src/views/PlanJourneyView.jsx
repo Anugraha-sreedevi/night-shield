@@ -522,7 +522,7 @@ export default function PlanJourneyView() {
       </div>
 
       {/* Right Map Canvas */}
-      <div className="flex-1 h-[450px] lg:h-auto min-h-[420px]">
+      <div className="flex-1 w-full min-h-[70vh] h-[70vh] lg:h-full relative">
         <MapView
           selectedRouteId={selectedRouteId}
           highlightStops={[originId, destId]}

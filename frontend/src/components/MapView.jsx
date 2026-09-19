@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo } from 'react';
+import 'leaflet/dist/leaflet.css';
 import { MapContainer, TileLayer, Marker, Popup, Polyline, Circle, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import { useApp } from '../context/AppContext';
@@ -66,14 +67,60 @@ const helpPointIcon = (type) => {
   `, [28, 28], [14, 14]);
 };
 
-// Map View Controller
-const MapController = ({ center, zoom }) => {
+// Map Lifecycle Controller: handles invalidateSize, window resize, tab changes, and route bounds fitting
+const MapLifecycleController = ({ center, zoom, selectedRouteCoords, activeTab }) => {
   const map = useMap();
+
+  // Invalidate map size on mount and on window resize
   useEffect(() => {
-    if (center) {
+    const triggerInvalidate = () => {
+      try {
+        map.invalidateSize();
+      } catch (e) {}
+    };
+
+    // Staggered timers on mount to handle dynamic layout and render cycles
+    const t1 = setTimeout(triggerInvalidate, 100);
+    const t2 = setTimeout(triggerInvalidate, 400);
+    const t3 = setTimeout(triggerInvalidate, 800);
+
+    window.addEventListener('resize', triggerInvalidate);
+    return () => {
+      clearTimeout(t1);
+      clearTimeout(t2);
+      clearTimeout(t3);
+      window.removeEventListener('resize', triggerInvalidate);
+    };
+  }, [map]);
+
+  // Invalidate map size whenever active tab or sidebar view toggles
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      try {
+        map.invalidateSize();
+      } catch (e) {}
+    }, 200);
+    return () => clearTimeout(timer);
+  }, [activeTab, map]);
+
+  // Fit map to selected route bounds when route is selected
+  useEffect(() => {
+    if (selectedRouteCoords && selectedRouteCoords.length > 1) {
+      try {
+        const bounds = L.latLngBounds(selectedRouteCoords);
+        map.fitBounds(bounds, {
+          padding: [50, 50],
+          maxZoom: 15,
+          animate: true,
+        });
+      } catch (e) {
+        console.error('fitBounds error:', e);
+      }
+    } else if (center) {
       map.setView(center, zoom, { animate: true });
     }
-  }, [center, zoom, map]);
+  }, [selectedRouteCoords, center, zoom, map]);
+
   return null;
 };
 
@@ -84,7 +131,7 @@ export default function MapView({
   className = "w-full h-full",
   showHelpPoints = true
 }) {
-  const { stops, routes, helpPoints, liveVehicles, emergencyActive } = useApp();
+  const { stops, routes, helpPoints, liveVehicles, emergencyActive, activeTab } = useApp();
 
   const cityCenter = [12.9716, 77.5946];
   const stopsById = useMemo(() => {
@@ -96,7 +143,7 @@ export default function MapView({
   // Find coordinates for routes to render polylines in violet-blue
   const routePolylines = useMemo(() => {
     return routes.map((r) => {
-      const coords = r.stops
+      const coords = (r.stops || [])
         .map((sId) => stopsById[sId])
         .filter(Boolean)
         .map((s) => [s.lat, s.lng]);
@@ -110,6 +157,11 @@ export default function MapView({
     });
   }, [routes, stopsById, selectedRouteId]);
 
+  const selectedRouteCoords = useMemo(() => {
+    const sel = routePolylines.find((r) => r.id === selectedRouteId);
+    return sel && sel.coords && sel.coords.length > 0 ? sel.coords : null;
+  }, [routePolylines, selectedRouteId]);
+
   const mapCenter = useMemo(() => {
     if (userPos && userPos.lat && userPos.lng) {
       return [userPos.lat, userPos.lng];
@@ -118,7 +170,10 @@ export default function MapView({
   }, [userPos]);
 
   return (
-    <div className={`relative overflow-hidden rounded-[24px] shadow-soft bg-white border border-slate-100 ${className}`}>
+    <div
+      className={`relative overflow-hidden rounded-[24px] shadow-soft bg-white border border-slate-100 w-full h-full ${className}`}
+      style={{ minHeight: '380px', width: '100%', height: '100%' }}
+    >
       {/* Emergency Active Glow Banner */}
       {emergencyActive && (
         <div className="absolute top-3 left-1/2 -translate-x-1/2 z-[1000] px-4 py-1.5 bg-[#FF4D4F] rounded-full text-white text-xs font-bold tracking-wide shadow-coral-glow flex items-center gap-2 animate-pulse">
@@ -132,9 +187,15 @@ export default function MapView({
         zoom={13}
         scrollWheelZoom={true}
         className="w-full h-full light-tiles"
+        style={{ width: '100%', height: '100%' }}
         zoomControl={false}
       >
-        <MapController center={mapCenter} zoom={emergencyActive ? 14 : 13} />
+        <MapLifecycleController
+          center={mapCenter}
+          zoom={emergencyActive ? 14 : 13}
+          selectedRouteCoords={selectedRouteCoords}
+          activeTab={activeTab}
+        />
         
         {/* OpenStreetMap Standard Light Tiles - Clean and high-contrast */}
         <TileLayer
