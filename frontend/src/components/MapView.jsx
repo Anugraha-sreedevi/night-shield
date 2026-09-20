@@ -171,7 +171,7 @@ export default function MapView({
 
   return (
     <div
-      className={`relative overflow-hidden rounded-[24px] shadow-soft bg-white border border-slate-100 w-full h-full ${className}`}
+      className={`relative isolate z-0 overflow-hidden rounded-[24px] shadow-soft bg-white border border-slate-100 w-full h-full ${className}`}
       style={{ minHeight: '380px', width: '100%', height: '100%' }}
     >
       {/* Emergency Active Glow Banner */}

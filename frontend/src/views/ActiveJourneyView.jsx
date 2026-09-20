@@ -328,7 +328,7 @@ export default function ActiveJourneyView() {
 
       {/* Check-In Prompt Modal (Off-Route / Sudden Stop) */}
       {checkInPrompt && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm animate-fade-in">
+        <div className="fixed inset-0 z-[9995] flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm animate-fade-in">
           <div className="w-full max-w-md bg-white rounded-[26px] p-6 shadow-2xl space-y-4 border border-slate-100">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-full bg-[#FFE9D6] text-[#EA580C] flex items-center justify-center shrink-0">

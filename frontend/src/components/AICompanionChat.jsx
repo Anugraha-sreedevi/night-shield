@@ -82,7 +82,7 @@ export default function AICompanionChat({ isOpen, onClose }) {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm animate-fade-in">
+    <div className="fixed inset-0 z-[9995] flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm animate-fade-in">
       <div className="w-full max-w-lg bg-white rounded-[26px] shadow-2xl flex flex-col h-[580px] overflow-hidden border border-slate-100">
         
         {/* Header */}

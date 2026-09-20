@@ -532,7 +532,7 @@ export default function PlanJourneyView() {
 
       {/* "Why?" Explainable AI Modal */}
       {showWhyModal && riskData && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm animate-fade-in">
+        <div className="fixed inset-0 z-[9995] flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm animate-fade-in">
           <div className="w-full max-w-md bg-white rounded-[26px] p-6 shadow-2xl space-y-4 border border-slate-100">
             <div className="flex items-center justify-between pb-2 border-b border-slate-100">
               <div className="flex items-center gap-2">

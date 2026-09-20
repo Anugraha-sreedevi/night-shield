@@ -146,6 +146,7 @@
   background: #E8EBF2 !important;
   font-family: var(--font-family) !important;
   border-radius: var(--card-radius);
+  z-index: 0 !important;
 }
 
 /* Keep roads, labels and stops high-contrast on light map tiles */

@@ -67,7 +67,7 @@ export default function SOSModal({ isOpen, onClose }) {
   const currLng = activeJourney?.current_lng || 77.6010;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#1B1B3A]/40 backdrop-blur-sm p-4 animate-fadeIn">
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-[#1B1B3A]/40 backdrop-blur-sm p-4 animate-fadeIn">
       <div className="relative w-full max-w-lg bg-white rounded-card-lg p-6 md:p-8 shadow-2xl text-[#1B1B3A] max-h-[90vh] overflow-y-auto">
         
         {!alertSent ? (

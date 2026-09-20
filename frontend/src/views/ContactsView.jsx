@@ -247,7 +247,7 @@ export default function ContactsView() {
 
       {/* Add/Edit Modal */}
       {showAddModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#1B1B3A]/40 backdrop-blur-sm p-4 animate-fadeIn">
+        <div className="fixed inset-0 z-[9995] flex items-center justify-center bg-[#1B1B3A]/40 backdrop-blur-sm p-4 animate-fadeIn">
           <div className="w-full max-w-md bg-white rounded-card-lg p-6 md:p-8 shadow-2xl text-[#1B1B3A] space-y-4">
             
             <div className="flex items-center justify-between">
