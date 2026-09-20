@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { createPortal } from 'react-dom';
 import { Sliders, Zap, AlertTriangle, Clock, ShieldAlert, RotateCcw, X, Activity } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import { api } from '../api/client';
@@ -75,17 +76,23 @@ export default function DemoControlsDrawer() {
       {/* Floating Demo Trigger Button (Pill-shaped, soft shadow) */}
       <button
         onClick={() => setDemoDrawerOpen(true)}
-        className="fixed bottom-36 md:bottom-6 right-4 md:right-6 z-[9990] px-4 py-2.5 bg-white dark:bg-[#1A1A32] hover:bg-slate-50 dark:hover:bg-[#222144] border border-slate-200 dark:border-white/10 rounded-full text-[#1B1B3A] dark:text-white font-bold text-xs shadow-lg flex items-center gap-2 backdrop-blur-md transition-all active:scale-95 group cursor-pointer"
+        className="fixed bottom-20 md:bottom-6 right-4 md:right-6 z-40 px-3.5 py-2 md:px-4 md:py-2.5 bg-white/95 dark:bg-[#1A1A32]/95 hover:bg-slate-50 dark:hover:bg-[#222144] border border-slate-200 dark:border-white/10 rounded-full text-[#1B1B3A] dark:text-white font-bold text-xs shadow-soft flex items-center gap-1.5 md:gap-2 backdrop-blur-md transition-all active:scale-95 group cursor-pointer"
         title="Open demo scenario panel"
       >
-        <Sliders className="w-4 h-4 text-[#8B5CF6] group-hover:rotate-45 transition-transform" />
-        <span className="font-semibold">Demo panel</span>
+        <Sliders className="w-3.5 h-3.5 md:w-4 md:h-4 text-[#8B5CF6] group-hover:rotate-45 transition-transform" />
+        <span className="font-semibold text-[11px] md:text-xs">Demo panel</span>
       </button>
 
-      {/* Slide-out Drawer */}
-      {demoDrawerOpen && (
-        <div className="fixed inset-0 z-[10000] flex justify-end bg-[#1B1B3A]/40 backdrop-blur-sm animate-fadeIn">
-          <div className="relative w-full max-w-sm h-full bg-white p-6 md:p-8 flex flex-col justify-between shadow-2xl text-[#1B1B3A] overflow-y-auto">
+      {/* Slide-out Drawer via Portal */}
+      {demoDrawerOpen && createPortal(
+        <div
+          className="fixed inset-0 z-[99999] flex justify-end bg-slate-950/70 backdrop-blur-md animate-fadeIn"
+          style={{ zIndex: 99999 }}
+        >
+          <div
+            className="relative w-full max-w-sm h-full bg-white dark:bg-[#151528] p-6 md:p-8 flex flex-col justify-between shadow-2xl text-[#1B1B3A] dark:text-[#F4F3FD] overflow-y-auto"
+            style={{ zIndex: 100000 }}
+          >
             
             <div>
               {/* Header */}
@@ -265,7 +272,8 @@ export default function DemoControlsDrawer() {
             </div>
 
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </>
   );

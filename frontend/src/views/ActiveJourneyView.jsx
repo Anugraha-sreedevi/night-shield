@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { 
   Navigation, 
   Share2, 
@@ -13,7 +14,8 @@ import {
   Compass,
   Sparkles,
   MapPin,
-  X
+  X,
+  ArrowRight
 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import { api } from '../api/client';
@@ -37,6 +39,7 @@ export default function ActiveJourneyView() {
   const [copied, setCopied] = useState(false);
   const [progress, setProgress] = useState(activeJourney?.progress_pct || 20);
   const [simulatedMinutesLeft, setSimulatedMinutesLeft] = useState(activeJourney?.eta_minutes || 22);
+  const [mobileTab, setMobileTab] = useState('journey'); // 'journey' | 'map'
 
   // Advance simulated progress
   useEffect(() => {
@@ -128,10 +131,39 @@ export default function ActiveJourneyView() {
   const adaptiveBuffer = baseEta + predictedDelayMin + 5;
 
   return (
-    <div className="flex-1 flex flex-col lg:flex-row h-full overflow-y-auto lg:overflow-hidden p-4 md:p-6 gap-6 bg-[#F1F0FA]">
+    <div className="flex-1 flex flex-col lg:flex-row h-full overflow-y-auto lg:overflow-hidden p-3.5 sm:p-5 md:p-6 gap-4 lg:gap-6 bg-[#F1F0FA] dark:bg-[#0D0D1A]">
       
+      {/* Mobile View Toggle */}
+      <div className="lg:hidden flex items-center p-1 bg-white/90 dark:bg-[#1A1A32]/90 backdrop-blur-md rounded-full border border-slate-200/80 dark:border-white/10 shadow-xs shrink-0">
+        <button
+          type="button"
+          onClick={() => setMobileTab('journey')}
+          className={`flex-1 py-2 rounded-full text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer ${
+            mobileTab === 'journey'
+              ? 'gradient-violet-blue text-white shadow-xs'
+              : 'text-[#8A8AA8] dark:text-[#9A9AB8]'
+          }`}
+        >
+          <Navigation className="w-3.5 h-3.5" />
+          <span>Commute Telemetry</span>
+        </button>
+        <button
+          type="button"
+          onClick={() => setMobileTab('map')}
+          className={`flex-1 py-2 rounded-full text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer ${
+            mobileTab === 'map'
+              ? 'gradient-violet-blue text-white shadow-xs'
+              : 'text-[#8A8AA8] dark:text-[#9A9AB8]'
+          }`}
+        >
+          <MapPin className="w-3.5 h-3.5" />
+          <span>Live GPS Tracking</span>
+          <span className="w-1.5 h-1.5 rounded-full bg-[#16A34A] animate-pulse"></span>
+        </button>
+      </div>
+
       {/* Left Monitoring Column */}
-      <div className="w-full lg:w-[460px] overflow-y-auto space-y-5 pr-1">
+      <div className={`${mobileTab === 'journey' ? 'block' : 'hidden'} lg:block w-full lg:w-[460px] overflow-y-auto space-y-4 pr-1 pb-28 lg:pb-0`}>
         
         {/* Status Header */}
         <div className="flex items-center justify-between">
@@ -317,7 +349,25 @@ export default function ActiveJourneyView() {
       </div>
 
       {/* Right Map Canvas */}
-      <div className="flex-1 w-full min-h-[70vh] h-[70vh] lg:h-full relative">
+      <div className={`${mobileTab === 'map' ? 'flex flex-col flex-1 h-[calc(100vh-170px)] sm:h-[calc(100vh-190px)]' : 'hidden'} lg:flex lg:flex-col lg:flex-1 lg:h-full relative`}>
+        {/* Mobile floating top pill */}
+        <div className="lg:hidden mb-2 flex items-center justify-between bg-white dark:bg-[#151528] px-3.5 py-1.5 rounded-full border border-slate-200/80 dark:border-white/10 shadow-xs shrink-0">
+          <div className="flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-[#16A34A] animate-pulse"></span>
+            <span className="text-xs font-bold text-[#1B1B3A] dark:text-[#F4F3FD]">
+              Live: {activeJourney.route?.name || 'Commute'} ({progress}%)
+            </span>
+          </div>
+          <button
+            type="button"
+            onClick={() => setMobileTab('journey')}
+            className="px-2.5 py-1 rounded-full gradient-violet-blue text-white text-[10px] font-bold shadow-xs flex items-center gap-1 cursor-pointer"
+          >
+            <span>Telemetry</span>
+            <ArrowRight className="w-3 h-3" />
+          </button>
+        </div>
+
         <MapView
           selectedRouteId={activeJourney.route_id}
           userPos={currentPos}
@@ -326,21 +376,27 @@ export default function ActiveJourneyView() {
         />
       </div>
 
-      {/* Check-In Prompt Modal (Off-Route / Sudden Stop) */}
-      {checkInPrompt && (
-        <div className="fixed inset-0 z-[9995] flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm animate-fade-in">
-          <div className="w-full max-w-md bg-white rounded-[26px] p-6 shadow-2xl space-y-4 border border-slate-100">
+      {/* Check-In Prompt Modal (Off-Route / Sudden Stop) via Portal */}
+      {checkInPrompt && createPortal(
+        <div
+          className="fixed inset-0 z-[99999] flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md animate-fade-in"
+          style={{ zIndex: 99999 }}
+        >
+          <div
+            className="w-full max-w-md bg-white dark:bg-[#151528] rounded-[26px] p-6 shadow-2xl space-y-4 border border-slate-100 dark:border-white/10 text-[#1B1B3A] dark:text-[#F4F3FD]"
+            style={{ zIndex: 100000 }}
+          >
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-full bg-[#FFE9D6] text-[#EA580C] flex items-center justify-center shrink-0">
                 <AlertTriangle className="w-5 h-5" />
               </div>
               <div>
-                <h3 className="font-bold text-sm text-[#1B1B3A]">{checkInPrompt.title}</h3>
-                <p className="text-[11px] text-[#8A8AA8]">Automated NightShield Watchdog Check-in</p>
+                <h3 className="font-bold text-sm text-[#1B1B3A] dark:text-[#F4F3FD]">{checkInPrompt.title}</h3>
+                <p className="text-[11px] text-[#8A8AA8] dark:text-[#9A9AB8]">Automated NightShield Watchdog Check-in</p>
               </div>
             </div>
 
-            <p className="text-xs text-[#1B1B3A] leading-relaxed bg-[#F8F7FD] p-3.5 rounded-2xl border border-slate-100">
+            <p className="text-xs text-[#1B1B3A] dark:text-[#F4F3FD] leading-relaxed bg-[#F8F7FD] dark:bg-[#1E1B36] p-3.5 rounded-2xl border border-slate-100 dark:border-white/10">
               {checkInPrompt.message}
             </p>
 
@@ -350,7 +406,7 @@ export default function ActiveJourneyView() {
                   setCheckInPrompt(null);
                   addNotification('Status Confirmed', 'Check-in verified: Passenger reported safe.', 'success');
                 }}
-                className="w-full py-3 rounded-full bg-[#DDF8EA] hover:bg-[#C9F3DC] text-[#16A34A] text-xs font-bold transition flex items-center justify-center gap-2"
+                className="w-full py-3 rounded-full bg-[#DDF8EA] dark:bg-[#153422] hover:bg-[#C9F3DC] text-[#16A34A] dark:text-[#34D399] text-xs font-bold transition flex items-center justify-center gap-2 cursor-pointer"
               >
                 <Check className="w-4 h-4" />
                 <span>I am safe (Dismiss prompt)</span>
@@ -361,13 +417,14 @@ export default function ActiveJourneyView() {
                   setCheckInPrompt(null);
                   triggerSOS(currentPos);
                 }}
-                className="w-full py-2.5 rounded-full bg-[#FF4D4F] hover:bg-[#E03E40] text-white text-xs font-bold transition shadow-coral-glow"
+                className="w-full py-2.5 rounded-full bg-[#FF4D4F] hover:bg-[#E03E40] text-white text-xs font-bold transition shadow-coral-glow cursor-pointer"
               >
                 I need help &bull; Escalate SOS
               </button>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
     </div>

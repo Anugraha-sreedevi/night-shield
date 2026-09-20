@@ -1,4 +1,5 @@
 import React from 'react';
+import { createPortal } from 'react-dom';
 import { ShieldCheck, Lock, KeyRound, Server, UserCheck, X } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 
@@ -30,9 +31,15 @@ export default function PrivacyModal() {
     },
   ];
 
-  return (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-[#1B1B3A]/40 backdrop-blur-sm p-4 animate-fadeIn">
-      <div className="relative w-full max-w-lg bg-white rounded-card-lg p-6 md:p-8 shadow-2xl text-[#1B1B3A]">
+  return createPortal(
+    <div
+      className="fixed inset-0 z-[99999] flex items-center justify-center bg-slate-950/70 backdrop-blur-md p-4 animate-fadeIn"
+      style={{ zIndex: 99999 }}
+    >
+      <div
+        className="relative w-full max-w-lg bg-white dark:bg-[#151528] rounded-card-lg p-6 md:p-8 shadow-2xl text-[#1B1B3A] dark:text-[#F4F3FD] border border-slate-100 dark:border-white/10"
+        style={{ zIndex: 100000 }}
+      >
         
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-3">
@@ -86,6 +93,7 @@ export default function PrivacyModal() {
         </div>
 
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

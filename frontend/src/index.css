@@ -149,6 +149,33 @@
   z-index: 0 !important;
 }
 
+/* Ensure leaflet panes remain strictly within local stacking context */
+.leaflet-pane {
+  z-index: 5 !important;
+}
+.leaflet-tile-pane {
+  z-index: 1 !important;
+}
+.leaflet-overlay-pane {
+  z-index: 4 !important;
+}
+.leaflet-marker-pane {
+  z-index: 6 !important;
+}
+.leaflet-tooltip-pane {
+  z-index: 7 !important;
+}
+.leaflet-popup-pane {
+  z-index: 8 !important;
+}
+.leaflet-top,
+.leaflet-bottom {
+  z-index: 10 !important;
+}
+.leaflet-control {
+  z-index: 10 !important;
+}
+
 /* Keep roads, labels and stops high-contrast on light map tiles */
 .light-tiles .leaflet-tile {
   filter: contrast(1.05) saturate(1.05);

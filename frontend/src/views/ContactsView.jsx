@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { createPortal } from 'react-dom';
 import { Users, UserPlus, Phone, Trash2, Edit3, CheckCircle2, Send, Lock, X } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import { api } from '../api/client';
@@ -245,10 +246,16 @@ export default function ContactsView() {
         )}
       </div>
 
-      {/* Add/Edit Modal */}
-      {showAddModal && (
-        <div className="fixed inset-0 z-[9995] flex items-center justify-center bg-[#1B1B3A]/40 backdrop-blur-sm p-4 animate-fadeIn">
-          <div className="w-full max-w-md bg-white rounded-card-lg p-6 md:p-8 shadow-2xl text-[#1B1B3A] space-y-4">
+      {/* Add/Edit Modal via Portal */}
+      {showAddModal && createPortal(
+        <div
+          className="fixed inset-0 z-[99999] flex items-center justify-center bg-slate-950/70 backdrop-blur-md p-4 animate-fadeIn"
+          style={{ zIndex: 99999 }}
+        >
+          <div
+            className="w-full max-w-md bg-white dark:bg-[#151528] rounded-card-lg p-6 md:p-8 shadow-2xl text-[#1B1B3A] dark:text-[#F4F3FD] space-y-4 border border-slate-100 dark:border-white/10"
+            style={{ zIndex: 100000 }}
+          >
             
             <div className="flex items-center justify-between">
               <h3 className="text-base font-bold text-[#1B1B3A]">
@@ -336,9 +343,9 @@ export default function ContactsView() {
             </form>
 
           </div>
-        </div>
+        </div>,
+        document.body
       )}
-
     </div>
   );
 }

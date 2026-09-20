@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { Sparkles, Send, X, Bot, User, ShieldCheck, MapPin, AlertTriangle, ArrowRight } from 'lucide-react';
 import { api } from '../api/client';
 import { useApp } from '../context/AppContext';
@@ -81,43 +82,50 @@ export default function AICompanionChat({ isOpen, onClose }) {
 
   if (!isOpen) return null;
 
-  return (
-    <div className="fixed inset-0 z-[9995] flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm animate-fade-in">
-      <div className="w-full max-w-lg bg-white rounded-[26px] shadow-2xl flex flex-col h-[580px] overflow-hidden border border-slate-100">
+  return createPortal(
+    <div
+      className="fixed inset-0 z-[99999] flex items-center justify-center p-3 sm:p-4 bg-slate-950/70 backdrop-blur-md animate-fade-in"
+      style={{ zIndex: 99999 }}
+    >
+      <div
+        className="w-full max-w-lg bg-white dark:bg-[#151528] rounded-[26px] shadow-2xl flex flex-col h-[540px] sm:h-[580px] max-h-[90vh] overflow-hidden border border-slate-100 dark:border-white/10 relative"
+        style={{ zIndex: 100000 }}
+      >
         
         {/* Header */}
-        <div className="p-4 bg-gradient-to-r from-[#8B5CF6]/10 to-[#3B82F6]/10 border-b border-slate-100 flex items-center justify-between">
+        <div className="p-4 bg-gradient-to-r from-[#8B5CF6]/10 to-[#3B82F6]/10 border-b border-slate-100 dark:border-white/10 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-[#FF5FA2] via-[#8B5CF6] to-[#3B82F6] flex items-center justify-center text-white shadow-md">
               <Sparkles className="w-5 h-5" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h3 className="font-bold text-sm text-[#1B1B3A]">AI Travel Companion</h3>
-                <span className="px-2 py-0.5 rounded-full bg-[#ECEAF8] text-[#8B5CF6] text-[10px] font-bold">
+                <h3 className="font-bold text-sm text-[#1B1B3A] dark:text-[#F4F3FD]">AI Travel Companion</h3>
+                <span className="px-2 py-0.5 rounded-full bg-[#ECEAF8] dark:bg-[#2A2445] text-[#8B5CF6] dark:text-[#A78BFA] text-[10px] font-bold">
                   Grounded AI
                 </span>
               </div>
-              <p className="text-[11px] text-[#8A8AA8]">
+              <p className="text-[11px] text-[#8A8AA8] dark:text-[#9A9AB8]">
                 AI trained on simulated data &bull; Live telemetry
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="w-8 h-8 rounded-full bg-white hover:bg-slate-100 text-[#8A8AA8] flex items-center justify-center transition shadow-sm"
+            className="w-8 h-8 rounded-full bg-white dark:bg-[#222144] hover:bg-slate-100 dark:hover:bg-[#2A2955] text-[#8A8AA8] dark:text-[#C5BFE0] flex items-center justify-center transition shadow-sm cursor-pointer"
+            aria-label="Close AI Companion"
           >
             <X className="w-4 h-4" />
           </button>
         </div>
 
         {/* Quick Suggestion Chips */}
-        <div className="px-4 py-2.5 bg-[#F8F7FD] border-b border-slate-100 flex gap-2 overflow-x-auto no-scrollbar">
+        <div className="px-4 py-2.5 bg-[#F8F7FD] dark:bg-[#1A1A32] border-b border-slate-100 dark:border-white/10 flex gap-2 overflow-x-auto no-scrollbar">
           {quickQuestions.map((q, idx) => (
             <button
               key={idx}
               onClick={() => handleSend(q)}
-              className="px-3 py-1 bg-white hover:bg-[#ECEAF8] text-[#8B5CF6] hover:text-[#7C3AED] text-[11px] font-semibold rounded-full border border-slate-200/70 whitespace-nowrap transition shadow-xs"
+              className="px-3 py-1 bg-white dark:bg-[#222144] hover:bg-[#ECEAF8] dark:hover:bg-[#2C2956] text-[#8B5CF6] dark:text-[#A78BFA] hover:text-[#7C3AED] text-[11px] font-semibold rounded-full border border-slate-200/70 dark:border-white/10 whitespace-nowrap transition shadow-xs cursor-pointer"
             >
               {q}
             </button>
@@ -125,7 +133,7 @@ export default function AICompanionChat({ isOpen, onClose }) {
         </div>
 
         {/* Messages Feed */}
-        <div className="flex-1 p-4 overflow-y-auto space-y-3 bg-[#FCFBFF]">
+        <div className="flex-1 p-4 overflow-y-auto space-y-3 bg-[#FCFBFF] dark:bg-[#121224]">
           {messages.map((m) => {
             const isAI = m.sender === 'ai';
             return (
@@ -134,28 +142,28 @@ export default function AICompanionChat({ isOpen, onClose }) {
                 className={`flex gap-2.5 ${isAI ? 'justify-start' : 'justify-end'}`}
               >
                 {isAI && (
-                  <div className="w-7 h-7 rounded-full bg-[#ECEAF8] text-[#8B5CF6] flex items-center justify-center shrink-0 mt-0.5">
+                  <div className="w-7 h-7 rounded-full bg-[#ECEAF8] dark:bg-[#2A2445] text-[#8B5CF6] dark:text-[#A78BFA] flex items-center justify-center shrink-0 mt-0.5">
                     <Bot className="w-4 h-4" />
                   </div>
                 )}
                 <div
                   className={`max-w-[82%] p-3.5 rounded-2xl text-xs leading-relaxed ${
                     isAI
-                      ? 'bg-white border border-slate-100 text-[#1B1B3A] shadow-soft'
+                      ? 'bg-white dark:bg-[#1E1B36] border border-slate-100 dark:border-white/10 text-[#1B1B3A] dark:text-[#F4F3FD] shadow-soft'
                       : 'bg-gradient-to-r from-[#8B5CF6] to-[#3B82F6] text-white shadow-md'
                   }`}
                 >
                   <p>{m.text}</p>
                   <div
                     className={`text-[9px] mt-1.5 flex items-center justify-end ${
-                      isAI ? 'text-[#8A8AA8]' : 'text-white/80'
+                      isAI ? 'text-[#8A8AA8] dark:text-[#9A9AB8]' : 'text-white/80'
                     }`}
                   >
                     {m.timestamp}
                   </div>
                 </div>
                 {!isAI && (
-                  <div className="w-7 h-7 rounded-full bg-slate-200 text-[#1B1B3A] flex items-center justify-center shrink-0 mt-0.5">
+                  <div className="w-7 h-7 rounded-full bg-slate-200 dark:bg-[#2A2445] text-[#1B1B3A] dark:text-[#F4F3FD] flex items-center justify-center shrink-0 mt-0.5">
                     <User className="w-4 h-4" />
                   </div>
                 )}
@@ -164,10 +172,10 @@ export default function AICompanionChat({ isOpen, onClose }) {
           })}
           {loading && (
             <div className="flex gap-2.5 justify-start">
-              <div className="w-7 h-7 rounded-full bg-[#ECEAF8] text-[#8B5CF6] flex items-center justify-center shrink-0">
+              <div className="w-7 h-7 rounded-full bg-[#ECEAF8] dark:bg-[#2A2445] text-[#8B5CF6] dark:text-[#A78BFA] flex items-center justify-center shrink-0">
                 <Bot className="w-4 h-4" />
               </div>
-              <div className="bg-white border border-slate-100 p-3 rounded-2xl text-xs text-[#8A8AA8] flex items-center gap-1.5 shadow-soft">
+              <div className="bg-white dark:bg-[#1E1B36] border border-slate-100 dark:border-white/10 p-3 rounded-2xl text-xs text-[#8A8AA8] dark:text-[#9A9AB8] flex items-center gap-1.5 shadow-soft">
                 <span className="w-2 h-2 rounded-full bg-[#8B5CF6] animate-bounce"></span>
                 <span className="w-2 h-2 rounded-full bg-[#8B5CF6] animate-bounce [animation-delay:0.2s]"></span>
                 <span className="w-2 h-2 rounded-full bg-[#8B5CF6] animate-bounce [animation-delay:0.4s]"></span>
@@ -183,25 +191,26 @@ export default function AICompanionChat({ isOpen, onClose }) {
             e.preventDefault();
             handleSend();
           }}
-          className="p-3 bg-white border-t border-slate-100 flex items-center gap-2"
+          className="p-3 bg-white dark:bg-[#151528] border-t border-slate-100 dark:border-white/10 flex items-center gap-2"
         >
           <input
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Ask AI companion about lighting, delays, safety..."
-            className="flex-1 py-2.5 px-4 bg-[#F8F7FD] rounded-full text-xs text-[#1B1B3A] placeholder-[#8A8AA8] border border-slate-200 focus:outline-none focus:border-[#8B5CF6]"
+            className="flex-1 py-2.5 px-4 bg-[#F8F7FD] dark:bg-[#1E1B36] rounded-full text-xs text-[#1B1B3A] dark:text-[#F4F3FD] placeholder-[#8A8AA8] dark:placeholder-[#6E6E8D] border border-slate-200 dark:border-white/10 focus:outline-none focus:border-[#8B5CF6]"
           />
           <button
             type="submit"
             disabled={!input.trim() || loading}
-            className="w-10 h-10 rounded-full gradient-violet-blue text-white flex items-center justify-center disabled:opacity-40 transition shadow-btn"
+            className="w-10 h-10 rounded-full gradient-violet-blue text-white flex items-center justify-center disabled:opacity-40 transition shadow-btn cursor-pointer"
           >
             <Send className="w-4 h-4" />
           </button>
         </form>
 
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

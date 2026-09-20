@@ -171,12 +171,12 @@ export default function MapView({
 
   return (
     <div
-      className={`relative isolate z-0 overflow-hidden rounded-[24px] shadow-soft bg-white border border-slate-100 w-full h-full ${className}`}
-      style={{ minHeight: '380px', width: '100%', height: '100%' }}
+      className={`relative isolate overflow-hidden rounded-[24px] shadow-soft bg-white dark:bg-[#151528] border border-slate-100 dark:border-white/10 w-full h-full ${className}`}
+      style={{ minHeight: '300px', width: '100%', height: '100%', zIndex: 0 }}
     >
       {/* Emergency Active Glow Banner */}
       {emergencyActive && (
-        <div className="absolute top-3 left-1/2 -translate-x-1/2 z-[1000] px-4 py-1.5 bg-[#FF4D4F] rounded-full text-white text-xs font-bold tracking-wide shadow-coral-glow flex items-center gap-2 animate-pulse">
+        <div className="absolute top-3 left-1/2 -translate-x-1/2 z-20 px-4 py-1.5 bg-[#FF4D4F] rounded-full text-white text-xs font-bold tracking-wide shadow-coral-glow flex items-center gap-2 animate-pulse">
           <span className="w-2 h-2 rounded-full bg-white animate-ping"></span>
           <span>Emergency grid active &bull; Closest rescue stations highlighted</span>
         </div>

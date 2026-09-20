@@ -16,20 +16,8 @@ export default function BottomNav() {
 
   return (
     <>
-      {/* Mobile Floating SOS Button */}
-      <div className="md:hidden fixed bottom-20 right-4 z-40">
-        <button
-          onClick={() => triggerSOS()}
-          className="w-14 h-14 rounded-full bg-[#FF4D4F] text-white shadow-coral-glow flex flex-col items-center justify-center font-extrabold text-[11px] active:scale-95 transition"
-          title="SOS Emergency"
-        >
-          <ShieldAlert className="w-5 h-5 animate-pulse" />
-          <span className="leading-tight">SOS</span>
-        </button>
-      </div>
-
       {/* Mobile Bottom Tab Bar */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-white/95 backdrop-blur-md border-t border-slate-100 px-2 flex items-center justify-around z-30 shadow-lg">
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-white/95 dark:bg-[#151528]/95 backdrop-blur-md border-t border-slate-200/80 dark:border-white/10 px-1.5 flex items-center justify-around z-30 shadow-lg">
         {tabs.map((tab) => {
           const Icon = tab.icon;
           const isActive = activeTab === tab.id;
@@ -37,8 +25,8 @@ export default function BottomNav() {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`relative flex flex-col items-center justify-center py-1 px-2 rounded-xl text-[10px] font-semibold transition ${
-                isActive ? 'text-[#8B5CF6] font-bold' : 'text-[#8A8AA8]'
+              className={`relative flex flex-col items-center justify-center py-1 px-1.5 rounded-xl text-[10px] font-semibold transition cursor-pointer ${
+                isActive ? 'text-[#8B5CF6] dark:text-[#A78BFA] font-bold' : 'text-[#8A8AA8] dark:text-[#8A8AA8] hover:text-[#1B1B3A] dark:hover:text-white'
               }`}
             >
               <div className="relative">

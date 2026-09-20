@@ -100,14 +100,14 @@ export default function App() {
       {/* Floating AI Companion Trigger Button */}
       <button
         onClick={() => setCompanionOpen(true)}
-        className="fixed bottom-20 md:bottom-6 left-6 z-[9990] px-4 py-2.5 bg-white dark:bg-[#1A1A32] hover:bg-slate-50 dark:hover:bg-[#222144] border border-slate-200 dark:border-white/10 rounded-full shadow-soft flex items-center gap-2 text-xs font-bold text-[#1B1B3A] dark:text-white transition hover:scale-105 active:scale-95 group cursor-pointer"
+        className="fixed bottom-20 md:bottom-6 left-4 md:left-6 z-40 px-3.5 py-2 md:px-4 md:py-2.5 bg-white/95 dark:bg-[#1A1A32]/95 hover:bg-slate-50 dark:hover:bg-[#222144] border border-slate-200 dark:border-white/10 rounded-full shadow-soft flex items-center gap-1.5 md:gap-2 text-xs font-bold text-[#1B1B3A] dark:text-white transition hover:scale-105 active:scale-95 group cursor-pointer backdrop-blur-md"
         title="Open grounded AI Travel Companion"
       >
-        <div className="w-6 h-6 rounded-full bg-gradient-to-tr from-[#FF5FA2] via-[#8B5CF6] to-[#3B82F6] flex items-center justify-center text-white shadow-xs group-hover:rotate-12 transition">
-          <Sparkles className="w-3.5 h-3.5" />
+        <div className="w-5 h-5 md:w-6 md:h-6 rounded-full bg-gradient-to-tr from-[#FF5FA2] via-[#8B5CF6] to-[#3B82F6] flex items-center justify-center text-white shadow-xs group-hover:rotate-12 transition shrink-0">
+          <Sparkles className="w-3 h-3 md:w-3.5 md:h-3.5" />
         </div>
-        <span>AI Companion</span>
-        <span className="w-2 h-2 rounded-full bg-[#16A34A] animate-pulse"></span>
+        <span className="text-[11px] md:text-xs">AI Companion</span>
+        <span className="w-1.5 h-1.5 rounded-full bg-[#16A34A] animate-pulse"></span>
       </button>
 
       {/* AI Travel Companion Modal */}
