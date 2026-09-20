@@ -75,7 +75,7 @@ export default function DemoControlsDrawer() {
       {/* Floating Demo Trigger Button (Pill-shaped, soft shadow) */}
       <button
         onClick={() => setDemoDrawerOpen(true)}
-        className="fixed bottom-20 md:bottom-6 right-6 z-40 px-4 py-2.5 bg-white hover:bg-slate-50 border border-slate-200 rounded-full text-[#1B1B3A] font-bold text-xs shadow-soft flex items-center gap-2 backdrop-blur-md transition-all active:scale-95 group"
+        className="fixed bottom-36 md:bottom-6 right-4 md:right-6 z-[9990] px-4 py-2.5 bg-white dark:bg-[#1A1A32] hover:bg-slate-50 dark:hover:bg-[#222144] border border-slate-200 dark:border-white/10 rounded-full text-[#1B1B3A] dark:text-white font-bold text-xs shadow-lg flex items-center gap-2 backdrop-blur-md transition-all active:scale-95 group cursor-pointer"
         title="Open demo scenario panel"
       >
         <Sliders className="w-4 h-4 text-[#8B5CF6] group-hover:rotate-45 transition-transform" />

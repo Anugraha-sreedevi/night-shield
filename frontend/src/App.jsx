@@ -100,7 +100,7 @@ export default function App() {
       {/* Floating AI Companion Trigger Button */}
       <button
         onClick={() => setCompanionOpen(true)}
-        className="fixed bottom-20 md:bottom-6 left-6 z-40 px-4 py-2.5 bg-white hover:bg-slate-50 border border-slate-200 rounded-full shadow-soft flex items-center gap-2 text-xs font-bold text-[#1B1B3A] transition hover:scale-105 active:scale-95 group"
+        className="fixed bottom-20 md:bottom-6 left-6 z-[9990] px-4 py-2.5 bg-white dark:bg-[#1A1A32] hover:bg-slate-50 dark:hover:bg-[#222144] border border-slate-200 dark:border-white/10 rounded-full shadow-soft flex items-center gap-2 text-xs font-bold text-[#1B1B3A] dark:text-white transition hover:scale-105 active:scale-95 group cursor-pointer"
         title="Open grounded AI Travel Companion"
       >
         <div className="w-6 h-6 rounded-full bg-gradient-to-tr from-[#FF5FA2] via-[#8B5CF6] to-[#3B82F6] flex items-center justify-center text-white shadow-xs group-hover:rotate-12 transition">
